@@ -11,8 +11,11 @@ type TokenResponse struct {
 	TokenType   string `json:"token_type"`
 	AccessToken string `json:"access_token"`
 }
+
 type SearchResponse struct {
 	Statuses []struct {
-		Text string `json:"text"`
+		CreatedAt string `json:"created_at"`
+		Id        string `json:"id_str"`
+		Text      string `json:"text"`
 	} `json:"statuses"`
 }

@@ -32,5 +32,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(searchResponse.Statuses[0].Text)
+	//とりあえず拾ったツイート全列挙してみる
+	for _, tweet := range searchResponse.Statuses {
+		fmt.Printf("%s\n", tweet.Text)
+	}
 }
