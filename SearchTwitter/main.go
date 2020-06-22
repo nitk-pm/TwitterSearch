@@ -26,7 +26,20 @@ func main() {
 	req.Header.Add("Authorization", "Basic "+handler.MakeCredential(oauth))
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
 	res, _ := http.DefaultClient.Do(req)
-	fmt.Printf("%+v\n", res) //トークンリクエストのレスポンス確認
+	// fmt.Printf("%+v\n", res) //トークンリクエストのレスポンス確認
+	if res.StatusCode != 200 {
+		fmt.Printf("正常に処理されませんでした エラーコード:%d\n", res.StatusCode)
+		switch res.StatusCode {
+		case 403:
+			fmt.Println("多分API KeyかSecretが間違っています")
+		case 404:
+			fmt.Println("URLのTypoやAPI側のリソースURLの変更を確認してください")
+		case 420, 429:
+			fmt.Printf("クエリ送りすぎです ")
+		}
+		fmt.Println("https://developer.twitter.com/ja/docs/basics/response-codes で詳細を確認してください")
+		return
+	}
 	defer res.Body.Close()
 	tokenResponse := &model.TokenResponse{}
 	body, _ := ioutil.ReadAll(res.Body)
