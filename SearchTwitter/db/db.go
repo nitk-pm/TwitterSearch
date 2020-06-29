@@ -2,9 +2,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/elastic/go-elasticsearch/v8"
-	// "github.com/elastic/go-elasticsearch/v8/esapi"
+	"github.com/elastic/go-elasticsearch/v8/esapi"
 	"log"
 	"strings"
 )
@@ -22,9 +23,10 @@ func main() {
 	fmt.Println(res)
 }
 func AddData(es *elasticsearch.Client, text string) (string, error) { //副作用あります，しょうがないよね．
-	res, err := es.Index(
-		"test", //Index(データベース)の名前
-		strings.NewReader("{\"title\":\"test2\"}"), //Document(レコード)はReader型でないとだめ(多分クソデカいデータ入れることもあるため)
-	) //"_type"は_docで固定，"_id"はデータ記録時にランダム生成
+	req := esapi.IndexRequest{
+		Index: "test",
+		Body:  strings.NewReader(text),
+	}
+	res, err := req.Do(context.Background(), es)
 	return res.String(), err
 }
