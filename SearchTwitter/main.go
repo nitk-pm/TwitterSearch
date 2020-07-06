@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/url"
@@ -13,8 +14,13 @@ import (
 const bearerTokenURL = "https://api.twitter.com/oauth2/token"
 const resourceURL = "https://api.twitter.com/1.1/search/tweets.json"
 
-//TODO 頼むからリファクタリングしてくれ．
 func main() {
+	es, err := db.GetElasticsearchClient()
+	if err != nil {
+		log.Fatal(err)
+	}
+	es.Info() //まだデータは投げないのでこれは無駄撃ちです．
+
 	var oauth model.OAuth
 	oauth.ConsumerKey = os.Getenv("REPEATER_CONSUMER_KEY")
 	oauth.ConsumerSecret = os.Getenv("REPEATER_CONSUMER_SECRET")
@@ -35,6 +41,13 @@ func main() {
 
 	//とりあえず拾ったツイート全列挙してみる
 	for _, tweet := range searchResponse.Statuses {
-		fmt.Printf("%s\n", tweet.Text)
+		txt, err := json.MarshalIndent(tweet, "", "   ")
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(txt), "\n")
 	}
+	// for _, tweet := range searchResponse.Statuses {
+	// 	db.AddData(es, tweet)
+	// }
 }

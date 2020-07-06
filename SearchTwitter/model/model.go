@@ -12,10 +12,14 @@ type TokenResponse struct {
 	AccessToken string `json:"access_token"`
 }
 
+// type SearchResponse struct {
+// 	Statuses []struct {
+// 		CreatedAt string `json:"created_at"`
+// 		Id        string `json:"id_str"`
+// 		Text      string `json:"text"`
+// 	} `json:"statuses"`
+// }
+
 type SearchResponse struct {
-	Statuses []struct {
-		CreatedAt string `json:"created_at"`
-		Id        string `json:"id_str"`
-		Text      string `json:"text"`
-	} `json:"statuses"`
+	Statuses []map[string]interface{} `json:"statuses"`
 }

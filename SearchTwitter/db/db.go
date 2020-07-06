@@ -1,26 +1,15 @@
-// package db
-package main
+package db
 
 import (
 	"context"
-	"fmt"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
-	"log"
 	"strings"
 )
 
-func main() {
+func GetElasticsearchClient() (*elasticsearch.Client, error) {
 	es, err := elasticsearch.NewDefaultClient()
-	if err != nil {
-		log.Fatal(err)
-	}
-	text := "{\"title\":\"test3\"}"
-	res, err := AddData(es, text)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(res)
+	return es, err
 }
 func AddData(es *elasticsearch.Client, text string) (string, error) { //副作用あります，しょうがないよね．
 	req := esapi.IndexRequest{
