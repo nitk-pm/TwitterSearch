@@ -16,9 +16,11 @@ const resourceURL = "https://api.twitter.com/1.1/search/tweets.json"
 
 func main() {
 	query := flag.String("query", "", "search query")
+	count := flag.Int("count", 15, "number of obtained tweets")
 	flag.Parse()
+
 	if *query == "" {
-		log.Fatal("クエリが指定されていません\n --------------USAGE--------------\n./TweetSearch -query=from:@twitter\n----------------------------------\n\n")
+		log.Fatal("クエリが指定されていません\n ----------------------USAGE----------------------\n./TweetSearch -query=from:@twitter -count=15\n--------------------------------------------------\n\n")
 	}
 
 	es, err := db.GetDBClient()
@@ -39,7 +41,7 @@ func main() {
 		log.Fatal(err)
 	}
 	queryParam := url.QueryEscape(*query)
-	searchResponse, err := handler.SearchTweets(accessToken, queryParam, resourceURL)
+	searchResponse, err := handler.SearchTweets(accessToken, queryParam, *count, resourceURL)
 	if err != nil {
 		log.Fatal(err)
 	}

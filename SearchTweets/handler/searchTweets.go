@@ -5,10 +5,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"repEATer/model"
+	"strconv"
 )
 
-func SearchTweets(accessToken string, queryParam string, url string) (*model.SearchResponse, error) {
-	req, err := http.NewRequest("GET", url+"?q="+queryParam, nil)
+func SearchTweets(accessToken string, queryParam string, count int, url string) (*model.SearchResponse, error) {
+	req, err := http.NewRequest("GET", url+"?q="+queryParam+"&count="+strconv.Itoa(count), nil)
 	if err != nil {
 		return nil, err
 	}
