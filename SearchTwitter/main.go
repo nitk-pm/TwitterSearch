@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/url"
@@ -14,6 +15,12 @@ const bearerTokenURL = "https://api.twitter.com/oauth2/token"
 const resourceURL = "https://api.twitter.com/1.1/search/tweets.json"
 
 func main() {
+	query := flag.String("query", "", "search query")
+	flag.Parse()
+	if *query == "" {
+		log.Fatal("クエリが指定されていません\n --------------USAGE--------------\n./TweetSearch -query=from:@twitter\n----------------------------------\n\n")
+	}
+
 	es, err := db.GetDBClient()
 	if err != nil {
 		log.Fatal(err)
@@ -31,7 +38,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	queryParam := url.QueryEscape("from:@nosykcam")
+	queryParam := url.QueryEscape(*query)
 	searchResponse, err := handler.SearchTweets(accessToken, queryParam, resourceURL)
 	if err != nil {
 		log.Fatal(err)
