@@ -13,7 +13,7 @@ func GetElasticsearchClient() (*elasticsearch.Client, error) {
 }
 func AddData(es *elasticsearch.Client, text string) (string, error) { //副作用あります，しょうがないよね．
 	req := esapi.IndexRequest{
-		Index: "test",
+		Index: "tweet",
 		Body:  strings.NewReader(text),
 	}
 	res, err := req.Do(context.Background(), es)

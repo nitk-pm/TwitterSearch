@@ -19,7 +19,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	es.Info() //まだデータは投げないのでこれは無駄撃ちです．
 
 	var oauth model.OAuth
 	oauth.ConsumerKey = os.Getenv("REPEATER_CONSUMER_KEY")
@@ -40,14 +39,13 @@ func main() {
 	}
 
 	//とりあえず拾ったツイート全列挙してみる
-	for _, tweet := range searchResponse.Statuses {
-		txt, err := json.MarshalIndent(tweet, "", "   ")
+	for _, tweetInfo := range searchResponse.Statuses {
+		txt, err := json.MarshalIndent(tweetInfo, "", "   ")
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmt.Println(string(txt), "\n")
+		tweetInfoJSONText, err := json.Marshal(tweetInfo)
+		db.AddData(es, string(tweetInfoJSONText))
 	}
-	// for _, tweet := range searchResponse.Statuses {
-	// 	db.AddData(es, tweet)
-	// }
 }
