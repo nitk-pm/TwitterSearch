@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/url"
@@ -15,7 +14,7 @@ const bearerTokenURL = "https://api.twitter.com/oauth2/token"
 const resourceURL = "https://api.twitter.com/1.1/search/tweets.json"
 
 func main() {
-	es, err := db.GetElasticsearchClient()
+	es, err := db.GetDBClient()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,14 +37,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//とりあえず拾ったツイート全列挙してみる
-	for _, tweetInfo := range searchResponse.Statuses {
-		txt, err := json.MarshalIndent(tweetInfo, "", "   ")
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(string(txt), "\n")
-		tweetInfoJSONText, err := json.Marshal(tweetInfo)
-		db.AddData(es, string(tweetInfoJSONText))
+	err = db.AddData(es, searchResponse)
+	if err != nil {
+		log.Fatal(err)
 	}
+	fmt.Println("Done")
 }
