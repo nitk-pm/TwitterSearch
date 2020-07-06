@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"../model"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"repEATer/model"
 )
 
 func SearchTweets(accessToken string, queryParam string, url string) (*model.SearchResponse, error) {

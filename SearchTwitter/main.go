@@ -1,12 +1,13 @@
 package main
 
 import (
-	"./handler"
-	"./model"
 	"fmt"
 	"log"
 	"net/url"
 	"os"
+	"repEATer/db"
+	"repEATer/handler"
+	"repEATer/model"
 )
 
 const bearerTokenURL = "https://api.twitter.com/oauth2/token"

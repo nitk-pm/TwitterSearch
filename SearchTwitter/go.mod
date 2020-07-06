@@ -1,5 +1,5 @@
-module github.com/elastic/elastic/go-elasticsearch/v7
+module repEATer
 
 go 1.14
 
-require github.com/elastic/go-elasticsearch/v8 v8.0.0-20200625154855-2c4ce25bd45c // indirect
+require github.com/elastic/go-elasticsearch/v8 v8.0.0-20200630125629-8413c97f3011

@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"../model"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"repEATer/model"
 )
 
 func GetToken(oauth model.OAuth, url string) (string, error) {

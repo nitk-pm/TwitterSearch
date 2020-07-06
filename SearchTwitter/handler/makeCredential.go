@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"../model"
 	"encoding/base64"
+	"repEATer/model"
 )
 
 func MakeCredential(oauth model.OAuth) string {
