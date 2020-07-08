@@ -1,12 +1,12 @@
 package handler
 
 import (
+	"TwitterSearch/model"
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"repEATer/model"
 )
 
 func makeCredential(oauth model.OAuth) string {

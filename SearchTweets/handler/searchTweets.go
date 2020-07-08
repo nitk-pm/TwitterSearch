@@ -1,10 +1,10 @@
 package handler
 
 import (
+	"TwitterSearch/model"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"repEATer/model"
 	"strconv"
 )
 

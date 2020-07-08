@@ -1,14 +1,14 @@
 package main
 
 import (
+	"TwitterSearch/db"
+	"TwitterSearch/handler"
+	"TwitterSearch/model"
 	"flag"
 	"fmt"
 	"log"
 	"net/url"
 	"os"
-	"repEATer/db"
-	"repEATer/handler"
-	"repEATer/model"
 )
 
 const bearerTokenURL = "https://api.twitter.com/oauth2/token"

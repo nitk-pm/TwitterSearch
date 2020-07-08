@@ -1,4 +1,4 @@
-module repEATer
+module TwitterSearch
 
 go 1.14
 

@@ -1,11 +1,11 @@
 package db
 
 import (
+	"TwitterSearch/model"
 	"context"
 	"encoding/json"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
-	"repEATer/model"
 	"strings"
 )
 
