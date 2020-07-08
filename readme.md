@@ -19,6 +19,5 @@ $ ./Search -query=from:@Twitter -count=20
 * Twitter APIのKeyとSecretを取得できる
 * ベアラートークンを使ってSearch APIを叩ける
 * Twitter APIドキュメント(英語)を読める
-* Dockerfileに何書いてるか分かる
 
 DBについては./SearchTweets/db/readme.mdを読んでください．
