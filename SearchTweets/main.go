@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"time"
 )
 
 const bearerTokenURL = "https://api.twitter.com/oauth2/token"
@@ -41,14 +42,18 @@ func main() {
 		log.Fatal(err)
 	}
 	queryParam := url.QueryEscape(*query)
-	searchResponse, err := handler.SearchTweets(accessToken, queryParam, *count, resourceURL)
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	err = db.AddData(es, searchResponse)
-	if err != nil {
-		log.Fatal(err)
+	for {
+		searchResponse, err := handler.SearchTweets(accessToken, queryParam, *count, resourceURL)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = db.AddData(es, searchResponse)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("Done")
+		time.Sleep(5 * time.Hour) //一日50件ないぐらいなので、５時5ごとに百100件回せば間違いなく漏れはない。
 	}
-	fmt.Println("Done")
 }

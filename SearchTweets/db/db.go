@@ -4,6 +4,7 @@ import (
 	"TwitterSearch/model"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 	"strings"
@@ -18,7 +19,7 @@ func GetDBClient() (*elasticsearch.Client, error) {
 //これはバルク処理にできるはず?
 func AddData(es *elasticsearch.Client, searchResponse *model.SearchResponse) error { //stringを返すべきか謎
 	deleteDuplicateTweetInfo(es, searchResponse)
-	for _, tweetInfo := range (*searchResponse).Statuses {
+	for i, tweetInfo := range (*searchResponse).Statuses {
 		tweetInfoJSONText, err := json.Marshal(tweetInfo)
 		if err != nil {
 			return err
@@ -32,6 +33,7 @@ func AddData(es *elasticsearch.Client, searchResponse *model.SearchResponse) err
 		if err != nil {
 			return err
 		}
+		fmt.Printf("tweet stored :%d/%d\n", i+1, len((*searchResponse).Statuses))
 	}
 	return nil
 }
@@ -43,6 +45,7 @@ func deleteDuplicateTweetInfo(es *elasticsearch.Client, searchResponse *model.Se
 	}
 	idListText := strings.Join(idList[:], ",")
 	_ = idListText
+	fmt.Printf("Get %d tweets\n", len(idList))
 	query := "{\"query\": {\"terms\": {\"id_str\":[" + idListText + "]}}}"
 	req := esapi.DeleteByQueryRequest{
 		Index: []string{"tweet"},
