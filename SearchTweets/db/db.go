@@ -28,7 +28,8 @@ func AddData(es *elasticsearch.Client, searchResponse *model.SearchResponse) err
 			Index: "tweet",
 			Body:  strings.NewReader(string(tweetInfoJSONText)),
 		}
-		_, err = req.Do(context.Background(), es)
+		res, err = req.Do(context.Background(), es)
+		res.Body.Close()
 		if err != nil {
 			return err
 		}
@@ -50,6 +51,7 @@ func deleteDuplicateTweetInfo(es *elasticsearch.Client, searchResponse *model.Se
 		Index: []string{"tweet"},
 		Body:  strings.NewReader(query),
 	}
-	_, err := req.Do(context.Background(), es)
+	res, err := req.Do(context.Background(), es)
+	res.Body.Close()
 	return err
 }
