@@ -15,7 +15,7 @@ func GetDBClient() (*elasticsearch.Client, error) {
 	return es, err
 }
 
-//TODO ESの投げたエラーをハンドリングしていないので，動いたのにデータが取れてないみたいなことになりかねない．
+//TODO ESの投げたエラーを無視しているので，動いたのにデータが取れてないみたいなことになりかねない．
 //これはバルク処理にできるはず?
 func AddData(es *elasticsearch.Client, searchResponse *model.SearchResponse) error { //stringを返すべきか謎
 	deleteDuplicateTweetInfo(es, searchResponse)
@@ -29,7 +29,6 @@ func AddData(es *elasticsearch.Client, searchResponse *model.SearchResponse) err
 			Body:  strings.NewReader(string(tweetInfoJSONText)),
 		}
 		_, err = req.Do(context.Background(), es)
-		// res, err := req.Do(context.Background(), es) //resを受け取ってハンドルする
 		if err != nil {
 			return err
 		}

@@ -10,13 +10,13 @@
 実行前にdocker-composeを入手してください．
 ```
 $ sudo docker-compose up -d
-$ cd ./SeachTweets && go build -o ../Search && cd ..
+$ cd ./SearchTweets && go build -o ../Search && cd ..
 $ ./Search -query=from:@Twitter -count=20
 ```
 
 これで@Twitterのツイートを20件取得できます．countは最大100までです．
 
-取得したデータはlocalhost:5601にブラウザでアクセスして，左のバーにあるDiscoverのページで見ることが出来ます(Kibanaの起動は遅いので注意)．
+取得したデータはlocalhost:5601にブラウザでアクセスして，メニューの中にあるDiscoverのページで見ることが出来ます(Kibanaの起動は遅いので注意)．
 ## (DB以外を)改造する際の前提知識
 * Twitter APIのKeyとSecretを取得できる
 * ベアラートークンを使ってSearch APIを叩ける
