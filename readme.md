@@ -27,8 +27,10 @@ DBについては./SearchTweets/db/readme.mdを読んでください．
 ## 開発フロー
 1. nitk-pm/Twittersearch(upstreamという)をclone
 1. cloneしたリポジトリにコミット
-1. Pull Requestを出す
+1. GitHub上からupstreamへPull Requestを出す
 1. 修正が必要なら修正し，マージする
+
+プルリクの#3に単純な例を置きました．
 
 ## バグの修正
 1. nitk-pm/TwitterSearchにIssueを立てる
