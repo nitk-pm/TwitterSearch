@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"time"
 )
 
 const bearerTokenURL = "https://api.twitter.com/oauth2/token"
@@ -29,11 +30,11 @@ func main() {
 	}
 
 	var oauth model.OAuth
-	oauth.ConsumerKey = os.Getenv("REPEATER_CONSUMER_KEY")
-	oauth.ConsumerSecret = os.Getenv("REPEATER_CONSUMER_SECRET")
+	oauth.ConsumerKey = os.Getenv("TWITTERSEARCH_CONSUMER_KEY")
+	oauth.ConsumerSecret = os.Getenv("TWITTERSEARCH_CONSUMER_SECRET")
 
 	if oauth.ConsumerKey == "" || oauth.ConsumerSecret == "" {
-		log.Fatal("環境変数が設定されていません．REPEATER_CONSUMER_(KEY|SECRET)にAPI KeyとSecretの値を設定してください")
+		log.Fatal("環境変数が設定されていません．TWITTERSEARCH_CONSUMER_(KEY|SECRET)にAPI KeyとSecretの値を設定してください")
 	}
 
 	accessToken, err := handler.GetToken(oauth, bearerTokenURL)
@@ -41,14 +42,18 @@ func main() {
 		log.Fatal(err)
 	}
 	queryParam := url.QueryEscape(*query)
-	searchResponse, err := handler.SearchTweets(accessToken, queryParam, *count, resourceURL)
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	err = db.AddData(es, searchResponse)
-	if err != nil {
-		log.Fatal(err)
+	for {
+		searchResponse, err := handler.SearchTweets(accessToken, queryParam, *count, resourceURL)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = db.AddData(es, searchResponse)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("Done")
+		time.Sleep(5 * time.Hour) //一日50件ないぐらいなので、5時間ごとに100件回せば間違いなく漏れはない。
 	}
-	fmt.Println("Done")
 }

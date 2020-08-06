@@ -4,6 +4,7 @@ import (
 	"TwitterSearch/model"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 	"strings"
@@ -14,11 +15,11 @@ func GetDBClient() (*elasticsearch.Client, error) {
 	return es, err
 }
 
-//TODO ESの投げたエラーをハンドリングしていないので，動いたのにデータが取れてないみたいなことになりかねない．
+//TODO ESの投げたエラーを無視しているので，動いたのにデータが取れてないみたいなことになりかねない．
 //これはバルク処理にできるはず?
 func AddData(es *elasticsearch.Client, searchResponse *model.SearchResponse) error { //stringを返すべきか謎
 	deleteDuplicateTweetInfo(es, searchResponse)
-	for _, tweetInfo := range (*searchResponse).Statuses {
+	for i, tweetInfo := range (*searchResponse).Statuses {
 		tweetInfoJSONText, err := json.Marshal(tweetInfo)
 		if err != nil {
 			return err
@@ -27,11 +28,12 @@ func AddData(es *elasticsearch.Client, searchResponse *model.SearchResponse) err
 			Index: "tweet",
 			Body:  strings.NewReader(string(tweetInfoJSONText)),
 		}
-		_, err = req.Do(context.Background(), es)
-		// res, err := req.Do(context.Background(), es) //resを受け取ってハンドルする
+		res, err = req.Do(context.Background(), es)
+		res.Body.Close()
 		if err != nil {
 			return err
 		}
+		fmt.Printf("tweet stored :%d/%d\n", i+1, len((*searchResponse).Statuses))
 	}
 	return nil
 }
@@ -43,11 +45,13 @@ func deleteDuplicateTweetInfo(es *elasticsearch.Client, searchResponse *model.Se
 	}
 	idListText := strings.Join(idList[:], ",")
 	_ = idListText
+	fmt.Printf("Get %d tweets\n", len(idList))
 	query := "{\"query\": {\"terms\": {\"id_str\":[" + idListText + "]}}}"
 	req := esapi.DeleteByQueryRequest{
 		Index: []string{"tweet"},
 		Body:  strings.NewReader(query),
 	}
-	_, err := req.Do(context.Background(), es)
+	res, err := req.Do(context.Background(), es)
+	res.Body.Close()
 	return err
 }
