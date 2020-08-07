@@ -28,7 +28,7 @@ func AddData(es *elasticsearch.Client, searchResponse *model.SearchResponse) err
 			Index: "tweet",
 			Body:  strings.NewReader(string(tweetInfoJSONText)),
 		}
-		res, err = req.Do(context.Background(), es)
+		res, err := req.Do(context.Background(), es)
 		res.Body.Close()
 		if err != nil {
 			return err
